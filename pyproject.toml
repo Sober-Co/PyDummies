@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "devdummies"
+version = "0.1.0a1"
+description = "Deterministic emulators, fakes, stubs & test doubles for Python 3.13"
+readme = "README.md"
+requires-python = ">=3.13"
+license = {text = "MIT"}
+authors = [{name="Sober & Co."}]
+dependencies = []
+keywords = ["testing", "test-doubles", "emulators", "fakes", "stubs"]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.13",
+  "Framework :: Pytest",
+  "Typing :: Typed",
+]
+
+[project.optional-dependencies]
+http = ["starlette>=0.37", "anyio>=4"]
+vcr = ["vcrpy>=6"]
+
+[project.urls]
+Homepage = "https://github.com/Sober-Co/devdummies"
+
+[tool.pyright]
+typeCheckingMode = "strict"
+include = ["src"]
+reportMissingTypeStubs = "warning"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/devdummies"]
+include = ["src/devdummies/py.typed"]
