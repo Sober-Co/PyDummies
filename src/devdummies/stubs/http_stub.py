@@ -6,7 +6,10 @@ RequestKey = Tuple[str, str]  # (method, path)
 class HttpStub:
     """[Stub] Route table mapping (METHOD, PATH) -> handler() -> (status, headers, body)."""
     def __init__(self, routes: Mapping[RequestKey, Callable[[], tuple[int, dict, str]]]):
-        self.routes = dict(routes)
+        self.routes = {
+            (method.upper(), path): handler
+            for (method, path), handler in routes.items()
+        }
         self.calls: list[RequestKey] = []
 
     def request(self, method: str, path: str) -> tuple[int, dict, str]:
