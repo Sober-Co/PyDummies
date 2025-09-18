@@ -24,3 +24,24 @@ def test_fs_blob_storage_roundtrip_and_listing() -> None:
 
         # Ensure we didn't create any directories on reads
         assert not (storage.root / "missing").exists()
+
+
+def test_fs_blob_storage_list_filters_and_sorts(tmp_path) -> None:
+    storage = FSBlobStorage(str(tmp_path))
+
+    storage.put("root.txt", b"root")
+    storage.put("docs/a.txt", b"a")
+    storage.put("docs/b.txt", b"b")
+    storage.put("docs/notes/c.txt", b"c")
+
+    assert storage.list() == [
+        "docs/a.txt",
+        "docs/b.txt",
+        "docs/notes/c.txt",
+        "root.txt",
+    ]
+    assert storage.list(prefix="docs/") == [
+        "docs/a.txt",
+        "docs/b.txt",
+        "docs/notes/c.txt",
+    ]

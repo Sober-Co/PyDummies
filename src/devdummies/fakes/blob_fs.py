@@ -27,11 +27,13 @@ class FSBlobStorage(BlobStorage):
         return self._path(key).exists()
 
     def list(self, prefix: str = "") -> list[str]:
-        out: list[str] = []
-        for p in self.root.rglob("*"):
-            if p.is_file():
-                rel = p.relative_to(self.root).as_posix()
-                if rel.startswith(prefix):
-                    out.append(rel)
-        out.sort()
-        return out
+        keys: list[str] = []
+        for path in self.root.rglob("*"):
+            if not path.is_file():
+                continue
+            key = path.relative_to(self.root).as_posix()
+            if prefix and not key.startswith(prefix):
+                continue
+            keys.append(key)
+        keys.sort()
+        return keys
