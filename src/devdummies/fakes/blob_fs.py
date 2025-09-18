@@ -8,14 +8,16 @@ class FSBlobStorage(BlobStorage):
         self.root = Path(root)
         self.root.mkdir(parents=True, exist_ok=True)
 
-    def _path(self, key: str, *, create_parent: bool = False) -> Path:
-        p = self.root / key
-        if create_parent:
-            p.parent.mkdir(parents=True, exist_ok=True)
-        return p
+    def _path(self, key: str) -> Path:
+        return self.root / key
+
+    def _path_for_write(self, key: str) -> Path:
+        path = self._path(key)
+        path.parent.mkdir(parents=True, exist_ok=True)
+        return path
 
     def put(self, key: str, data: bytes) -> None:
-        self._path(key, create_parent=True).write_bytes(data)
+        self._path_for_write(key).write_bytes(data)
 
     def get(self, key: str) -> bytes:
         return self._path(key).read_bytes()
