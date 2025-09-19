@@ -3,7 +3,7 @@ from __future__ import annotations
 def create_minimal_app():
     """[Emulator] Return a minimal Starlette app for testing webhooks.
 
-    Requires optional dependency: starlette.
+    Requires optional dependency: Starlette.
     """
     try:
         from starlette.applications import Starlette

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from devdummies.stubs.http_stub import HttpStub
 
 
@@ -18,6 +17,7 @@ def test_http_stub_routes_and_calls():
     assert status == 404
 
 
+
 def test_http_stub_routes_allow_lowercase_methods():
     stub = HttpStub({
         ("post", "/lower"): lambda: (201, {"X-Test": "lower"}, "lowercase")
@@ -28,3 +28,14 @@ def test_http_stub_routes_allow_lowercase_methods():
     assert status == 201
     assert headers == {"X-Test": "lower"}
     assert body == "lowercase"
+
+def test_http_stub_normalizes_registered_methods():
+    stub = HttpStub({
+        ("post", "/submit"): lambda: (201, {}, "created")
+    })
+
+    status, _, body = stub.request("POST", "/submit")
+
+    assert status == 201 and body == "created"
+    assert stub.calls == [("POST", "/submit")]
+

@@ -7,3 +7,7 @@ def test_fake_clock_advances():
     t0 = c.now()
     c.sleep(timedelta(seconds=5))
     assert (c.now() - t0).total_seconds() == 5
+
+
+def test_fake_clock_default_is_deterministic():
+    assert FakeClock().now() == FakeClock().now()
